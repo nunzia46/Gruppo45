@@ -1,3 +1,3 @@
-Inserire in questa cartella :
-- il class diagram di dettaglio con le classi della gui, del controller e del model (in formato vpp e immagine), 
-- un eventuale documento che ne spieghi il significato
+[ControllerGUIGruppo45 (1).vpp](../../../../Downloads/ControllerGUIGruppo45%20%281%29.vpp)
+
+[documentazione GUI e Controller GRUPPO45.docx](../../../../Downloads/documentazione%20GUI%20e%20Controller%20GRUPPO45.docx)
