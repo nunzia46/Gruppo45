@@ -32,10 +32,6 @@ import java.time.LocalDateTime;
             System.out.println("Sistema Ospedaliero Avviato!");
             System.out.println("Utente loggato: " + admin.getLogin());
             System.out.println("È in corso il ricovero per: " + p.getNome() + " " + p.getCognome());
-
-            SwingUtilities.invokeLater(() -> {
-                new ospedale.gui.LoginFrame(new ospedale.controller.Controller()).setVisible(true);
-            });
         }
     }
 
