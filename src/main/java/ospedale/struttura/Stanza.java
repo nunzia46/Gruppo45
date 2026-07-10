@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stanza {
-    public int numStanza;
+    private int numStanza;
     private List<Letto>letti;
 
+    // costruttore
     public Stanza (int numStanza){
         this.numStanza=numStanza;
         this.letti= new ArrayList<>();

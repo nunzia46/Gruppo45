@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Reparto {
-    public String nome;
+    private String nome;
     private List<Stanza> stanze;
     private List<Medico> medici;
 
