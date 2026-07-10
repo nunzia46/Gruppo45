@@ -25,6 +25,9 @@ public class Medico extends Utente{
     }
 
     public void registraPrestazione (Ricovero ricovero, LocalDateTime inizio, LocalDateTime fine){
+        Prestazione prestazione = new Prestazione(inizio, ricovero);
+        prestazione.setFine(fine);
+        this.prestazioni.add(prestazione);
         System.out.println("Prestazione Registrata");
     }
 
