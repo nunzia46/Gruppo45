@@ -136,8 +136,12 @@ import java.util.List;
 									   LocalDateTime inizio, LocalDateTime finePrevista) {
 			for (Ricovero r : ricoveri) {
 				if (r.getLetto().equals(letto)) {
-					LocalDateTime fineEsist = r.getDimissioneEffettiva() != null
-							? r.getDimissioneEffettiva() : r.getDimissionePrevista();
+					LocalDateTime fineEsist;
+					if (r.getDimissioneEffettiva() != null){
+						fineEsist = r.getDimissioneEffettiva();
+					}else{
+						fineEsist = r.getDimissionePrevista();
+					}
 					if (fineEsist == null)
 						return "Letto " + letto.getCodiceIdentificativo() + " già occupato.";
 					if (inizio.isBefore(fineEsist) && finePrevista.isAfter(r.getInizio()))
