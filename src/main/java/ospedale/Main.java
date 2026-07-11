@@ -2,6 +2,7 @@ package ospedale;
 
 import ospedale.clinica.Paziente;
 import ospedale.clinica.Ricovero;
+import ospedale.personale.Turno;
 import ospedale.utenti.Amministratore;
 import ospedale.struttura.Letto;
 import ospedale.utenti.Medico;
@@ -21,7 +22,7 @@ import java.time.LocalDateTime;
             Medico medico = new Medico("Marco", "1234");
 
             // creiamo un paziente
-            Paziente p = new Paziente("Mario", "Rossi");
+            Paziente p = new Paziente("Mario", "Rossi", "MRRSS987400JQ");
 
             // creiamo un letto
             Letto l = new Letto("L-101");
@@ -37,6 +38,10 @@ import java.time.LocalDateTime;
             admin.registraRicovero(p, l, dataInizio, dataFine);
             // l'amministratore registra l'assenza
             admin.registraAssenza(medico, dataInizio, dataFine);
+
+            // creiamo un turno per il medico
+            Turno t1 = new Turno(dataInizio, dataFine);
+            medico.addTurno(t1);
 
             // il medico registra una prestazione
             medico.registraPrestazione(ricovero, dataInizio, dataFine);

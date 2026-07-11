@@ -16,9 +16,6 @@ public class Paziente {
         this.ricoveri= new ArrayList<>();
     }
 
-    public Paziente(String mario, String rossi) {
-    }
-
     public void setNome(String nome) {this.nome = nome;}
     public String getNome(){return nome;}
 
