@@ -8,7 +8,7 @@ public class ConnessioneDatabase {
     private static ConnessioneDatabase instance;
     private Connection connection;
 
-    private final String url = "jdbc:postgresql://localhost:3467/ospedale";
+    private final String url = "jdbc:postgresql://localhost:5432/ospedale";
     private final String username = "postgres";
     private final String password = "pass1234";
 
