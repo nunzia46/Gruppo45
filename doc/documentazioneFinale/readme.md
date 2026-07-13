@@ -1,4 +1,4 @@
-Inserire in questa cartella :
+Inserire in questa cartella:
 - [DAOGRUPPO45.vpp](../../../../Downloads/DAOGRUPPO45.vpp)
 - [sequence_mainGRUPPO45.vpp](../../../../Downloads/sequence_mainGRUPPO45.vpp)
 - [sequence_registraRicoveroGRUPPO45.vpp](../../../../Downloads/sequence_registraRicoveroGRUPPO45.vpp)
