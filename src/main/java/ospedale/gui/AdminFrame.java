@@ -9,63 +9,62 @@ import ospedale.struttura.Reparto;
 import ospedale.utenti.Medico;
 
 import javax.swing.*;
-        import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-        import java.time.LocalDate;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * Dashboard dell'amministratore con gestione pazienti, ricoveri, letti,
+ * dimissioni e assenze.
+ */
 public class AdminFrame extends JFrame {
 
     private static final DateTimeFormatter FMT_DT =
             DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    private static final DateTimeFormatter FMT_D =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private final Controller controller;
 
-    // Tab pazienti
     private DefaultTableModel modelPazienti;
-
-    // Tab ricoveri
     private JComboBox<PazienteWrapper> comboPazienti;
-    private JComboBox<LettoWrapper>    comboLetti;
-    private JComboBox<RepartoWrapper>  comboRepartiRicovero;
+    private JComboBox<LettoWrapper> comboLetti;
+    private JComboBox<RepartoWrapper> comboRepartiRicovero;
     private JTextField campoInizioR, campoFineR;
     private JLabel labelEsitoR;
-
-    // Tab letti
     private JComboBox<RepartoWrapper> comboRepartiLetti;
     private DefaultTableModel modelLetti;
-
-    // Tab dimissioni
     private JSpinner spinnerDimissioni;
     private DefaultTableModel modelDimissioni;
-
-    // Tab assenze
     private JComboBox<MedicoWrapper> comboMediciAssenza;
     private JTextField campoInizioA, campoFineA;
     private JTextArea areaRisultatiAssenza;
 
+    /**
+     * Costruisce la dashboard amministratore con il controller specificato.
+     *
+     * @param controller il controller del sistema
+     */
     public AdminFrame(Controller controller) {
         this.controller = controller;
         costruisciUI();
     }
 
+    /** Configura l'interfaccia con le tab di gestione. */
     private void costruisciUI() {
         setTitle("Dashboard Amministratore");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(820, 560));
 
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Pazienti",   costruisciPannelloPazienti());
-        tabs.addTab("Ricoveri",   costruisciPannelloRicoveri());
-        tabs.addTab("Letti",      costruisciPannelloLetti());
+        tabs.addTab("Pazienti", costruisciPannelloPazienti());
+        tabs.addTab("Ricoveri", costruisciPannelloRicoveri());
+        tabs.addTab("Letti", costruisciPannelloLetti());
         tabs.addTab("Dimissioni", costruisciPannelloDimissioni());
-        tabs.addTab("Assenze",    costruisciPannelloAssenze());
+        tabs.addTab("Assenze", costruisciPannelloAssenze());
 
         JButton btnLogout = new JButton("Logout");
         btnLogout.addActionListener(e -> {
@@ -82,7 +81,7 @@ public class AdminFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    // Tab pazienti
+    /** Crea la tab di gestione pazienti. */
     private JPanel costruisciPannelloPazienti() {
         JPanel p = new JPanel(new BorderLayout(8, 8));
         p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -94,11 +93,10 @@ public class AdminFrame extends JFrame {
         aggiornaTabellaP();
         p.add(new JScrollPane(new JTable(modelPazienti)), BorderLayout.CENTER);
 
-        // Aggiunta
         JPanel form = new JPanel(new GridLayout(1, 7, 5, 0));
         form.setBorder(BorderFactory.createTitledBorder("Aggiungi paziente"));
         JTextField fNome = new JTextField(); JTextField fCognome = new JTextField();
-        JTextField fCF   = new JTextField();
+        JTextField fCF = new JTextField();
         form.add(new JLabel("Nome:")); form.add(fNome);
         form.add(new JLabel("Cognome:")); form.add(fCognome);
         form.add(new JLabel("CF:")); form.add(fCF);
@@ -116,6 +114,7 @@ public class AdminFrame extends JFrame {
         return p;
     }
 
+    /** Aggiorna la tabella dei pazienti. */
     private void aggiornaTabellaP() {
         if (modelPazienti == null) return;
         modelPazienti.setRowCount(0);
@@ -123,6 +122,7 @@ public class AdminFrame extends JFrame {
             modelPazienti.addRow(new Object[]{paz.getNome(), paz.getCognome(), paz.getCodiceFiscale()});
     }
 
+    /** Aggiorna la combo box dei pazienti. */
     private void aggiornaComboP() {
         if (comboPazienti == null) return;
         comboPazienti.removeAllItems();
@@ -130,7 +130,7 @@ public class AdminFrame extends JFrame {
             comboPazienti.addItem(new PazienteWrapper(paz));
     }
 
-    // Tab ricoveri
+    /** Crea la tab di registrazione ricoveri. */
     private JPanel costruisciPannelloRicoveri() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
@@ -138,28 +138,27 @@ public class AdminFrame extends JFrame {
         g.insets = new Insets(7, 7, 7, 7);
         g.fill = GridBagConstraints.HORIZONTAL;
 
-        comboPazienti       = new JComboBox<>();
+        comboPazienti = new JComboBox<>();
         comboRepartiRicovero = new JComboBox<>();
-        comboLetti          = new JComboBox<>();
-        campoInizioR        = new JTextField("dd/MM/yyyy HH:mm", 16);
-        campoFineR          = new JTextField("dd/MM/yyyy HH:mm", 16);
-        labelEsitoR         = new JLabel(" ");
+        comboLetti = new JComboBox<>();
+        campoInizioR = new JTextField("dd/MM/yyyy HH:mm", 16);
+        campoFineR = new JTextField("dd/MM/yyyy HH:mm", 16);
+        labelEsitoR = new JLabel(" ");
 
         for (Paziente paz : controller.getPazienti())
             comboPazienti.addItem(new PazienteWrapper(paz));
         for (Reparto r : controller.getReparti())
             comboRepartiRicovero.addItem(new RepartoWrapper(r));
 
-        // Aggiorna letti al cambio reparto
         comboRepartiRicovero.addActionListener(e -> aggiornaComboLetti());
         aggiornaComboLetti();
 
         int riga = 0;
         addCoppia(p, g, riga++, "Paziente:", comboPazienti);
-        addCoppia(p, g, riga++, "Reparto:",  comboRepartiRicovero);
-        addCoppia(p, g, riga++, "Letto:",    comboLetti);
+        addCoppia(p, g, riga++, "Reparto:", comboRepartiRicovero);
+        addCoppia(p, g, riga++, "Letto:", comboLetti);
         addCoppia(p, g, riga++, "Inizio (dd/MM/yyyy HH:mm):", campoInizioR);
-        addCoppia(p, g, riga++, "Dimissione prevista:",        campoFineR);
+        addCoppia(p, g, riga++, "Dimissione prevista:", campoFineR);
 
         JButton btnReg = new JButton("Registra ricovero");
         btnReg.addActionListener(e -> eseguiRegistraRicovero());
@@ -170,6 +169,7 @@ public class AdminFrame extends JFrame {
         return p;
     }
 
+    /** Aggiorna la combo box dei letti in base al reparto selezionato. */
     private void aggiornaComboLetti() {
         if (comboLetti == null || comboRepartiRicovero == null) return;
         comboLetti.removeAllItems();
@@ -179,12 +179,13 @@ public class AdminFrame extends JFrame {
             comboLetti.addItem(new LettoWrapper(l, controller.isLettoOccupato(l)));
     }
 
+    /** Esegue la registrazione del ricovero con validazione. */
     private void eseguiRegistraRicovero() {
         try {
             LocalDateTime inizio = LocalDateTime.parse(campoInizioR.getText().trim(), FMT_DT);
-            LocalDateTime fine   = LocalDateTime.parse(campoFineR.getText().trim(),   FMT_DT);
+            LocalDateTime fine = LocalDateTime.parse(campoFineR.getText().trim(), FMT_DT);
             PazienteWrapper pw = (PazienteWrapper) comboPazienti.getSelectedItem();
-            LettoWrapper    lw = (LettoWrapper)    comboLetti.getSelectedItem();
+            LettoWrapper lw = (LettoWrapper) comboLetti.getSelectedItem();
             if (pw == null || lw == null) return;
 
             String err = controller.registraRicovero(pw.paziente, lw.letto, inizio, fine);
@@ -201,7 +202,7 @@ public class AdminFrame extends JFrame {
         }
     }
 
-    // Tab letti
+    /** Crea la tab di visualizzazione letti. */
     private JPanel costruisciPannelloLetti() {
         JPanel p = new JPanel(new BorderLayout(8, 8));
         p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -225,7 +226,6 @@ public class AdminFrame extends JFrame {
         };
         JTable tabella = new JTable(modelLetti);
 
-        // Celle occupate in rosso
         tabella.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             public Component getTableCellRendererComponent(JTable t, Object v,
                                                            boolean sel, boolean foc, int row, int col) {
@@ -247,6 +247,7 @@ public class AdminFrame extends JFrame {
         return p;
     }
 
+    /** Aggiorna la tabella dei letti con lo stato attuale. */
     private void aggiornaTabLetti() {
         if (modelLetti == null) return;
         modelLetti.setRowCount(0);
@@ -259,7 +260,7 @@ public class AdminFrame extends JFrame {
         }
     }
 
-    // Tab dimissioni
+    /** Crea la tab di ricerca dimissioni. */
     private JPanel costruisciPannelloDimissioni() {
         JPanel p = new JPanel(new BorderLayout(8, 8));
         p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -271,7 +272,7 @@ public class AdminFrame extends JFrame {
         spinnerDimissioni.setEditor(new JSpinner.DateEditor(spinnerDimissioni, "dd/MM/yyyy"));
         spinnerDimissioni.setPreferredSize(new Dimension(120, 28));
 
-        JButton btnOggi  = new JButton("Oggi");
+        JButton btnOggi = new JButton("Oggi");
         JButton btnCerca = new JButton("Cerca");
         btnOggi.addActionListener(e -> {
             spinnerDimissioni.setValue(java.util.Date.from(
@@ -296,6 +297,7 @@ public class AdminFrame extends JFrame {
         return p;
     }
 
+    /** Aggiorna la tabella dei pazienti in scadenza di dimissione. */
     private void aggiornaDimissioni() {
         if (modelDimissioni == null) return;
         modelDimissioni.setRowCount(0);
@@ -305,7 +307,7 @@ public class AdminFrame extends JFrame {
             modelDimissioni.addRow(new Object[]{paz.getNome(), paz.getCognome(), paz.getCodiceFiscale()});
     }
 
-    // Tab assenze
+    /** Crea la tab di gestione assenze. */
     private JPanel costruisciPannelloAssenze() {
         JPanel p = new JPanel(new BorderLayout(8, 8));
         p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -321,11 +323,11 @@ public class AdminFrame extends JFrame {
             comboMediciAssenza.addItem(new MedicoWrapper(m));
 
         campoInizioA = new JTextField("dd/MM/yyyy HH:mm", 16);
-        campoFineA   = new JTextField("dd/MM/yyyy HH:mm", 16);
+        campoFineA = new JTextField("dd/MM/yyyy HH:mm", 16);
 
-        addCoppia(form, g, 0, "Medico:",  comboMediciAssenza);
+        addCoppia(form, g, 0, "Medico:", comboMediciAssenza);
         addCoppia(form, g, 1, "Inizio (dd/MM/yyyy HH:mm):", campoInizioA);
-        addCoppia(form, g, 2, "Fine (dd/MM/yyyy HH:mm):",   campoFineA);
+        addCoppia(form, g, 2, "Fine (dd/MM/yyyy HH:mm):", campoFineA);
 
         JButton btnRegistra = new JButton("Registra assenza");
         btnRegistra.addActionListener(e -> eseguiRegistraAssenza());
@@ -339,16 +341,17 @@ public class AdminFrame extends JFrame {
         return p;
     }
 
+    /** Esegue la registrazione dell'assenza e mostra i risultati. */
     private void eseguiRegistraAssenza() {
         try {
             LocalDateTime inizio = LocalDateTime.parse(campoInizioA.getText().trim(), FMT_DT);
-            LocalDateTime fine   = LocalDateTime.parse(campoFineA.getText().trim(),   FMT_DT);
+            LocalDateTime fine = LocalDateTime.parse(campoFineA.getText().trim(), FMT_DT);
             MedicoWrapper mw = (MedicoWrapper) comboMediciAssenza.getSelectedItem();
             if (mw == null) return;
 
-            List<Turno>      turniScoperti = controller.getTurniScoperti(mw.medico, inizio, fine);
-            List<Prestazione> prestScop   = controller.getPrestazioniScoperte(mw.medico, inizio, fine);
-            List<Medico>      sostituti   = controller.registraAssenzaESuggerisciSostituti(
+            List<Turno> turniScoperti = controller.getTurniScoperti(mw.medico, inizio, fine);
+            List<Prestazione> prestScop = controller.getPrestazioniScoperte(mw.medico, inizio, fine);
+            List<Medico> sostituti = controller.registraAssenzaESuggerisciSostituti(
                     mw.medico, inizio, fine);
 
             StringBuilder sb = new StringBuilder();
@@ -377,35 +380,57 @@ public class AdminFrame extends JFrame {
         }
     }
 
-    // utility
+    /**
+     * Aggiunge una coppia etichetta-campo al pannello.
+     *
+     * @param p        il pannello
+     * @param g        i vincoli di layout
+     * @param riga     la riga
+     * @param etichetta il testo dell'etichetta
+     * @param campo    il componente campo
+     */
     private void addCoppia(JPanel p, GridBagConstraints g, int riga,
                            String etichetta, JComponent campo) {
         g.gridy = riga; g.gridx = 0; g.gridwidth = 1; p.add(new JLabel(etichetta), g);
         g.gridx = 1; p.add(campo, g);
     }
 
-    // Wrapper
+    /** Wrapper per la visualizzazione dei pazienti nelle combo. */
     private static class PazienteWrapper {
         final Paziente paziente;
+
         PazienteWrapper(Paziente p) { this.paziente = p; }
+
         public String toString() { return paziente.getNome() + " " + paziente.getCognome(); }
     }
+
+    /** Wrapper per la visualizzazione dei reparti nelle combo. */
     private static class RepartoWrapper {
         final Reparto reparto;
+
         RepartoWrapper(Reparto r) { this.reparto = r; }
+
         public String toString() { return reparto.getNome(); }
     }
+
+    /** Wrapper per la visualizzazione dei letti nelle combo. */
     private static class LettoWrapper {
-        final Letto letto; final boolean occupato;
+        final Letto letto;
+        final boolean occupato;
+
         LettoWrapper(Letto l, boolean occ) { this.letto = l; this.occupato = occ; }
+
         public String toString() {
             return letto.getCodiceIdentificativo() + (occupato ? " [OCCUPATO]" : " [libero]");
         }
     }
+
+    /** Wrapper per la visualizzazione dei medici nelle combo. */
     private static class MedicoWrapper {
         final Medico medico;
+
         MedicoWrapper(Medico m) { this.medico = m; }
+
         public String toString() { return medico.getLogin(); }
     }
 }
-

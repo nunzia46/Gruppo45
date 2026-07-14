@@ -9,44 +9,71 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Medico extends Utente{
+/**
+ * Rappresenta un medico dell'ospedale.
+ * Estende Utente e gestisce turni, prestazioni e assenze.
+ */
+public class Medico extends Utente {
 
-    private List<Turno>turni;
-    private List<Prestazione> prestazioni;
-    private List<Assenza> assenze;
+    private final List<Turno> turni;
+    private final List<Prestazione> prestazioni;
+    private final List<Assenza> assenze;
 
-    //costruttore
+    /**
+     * Costruisce un medico con le credenziali specificate.
+     * Inizializza le liste di turni, prestazioni e assenze.
+     *
+     * @param login    il nome utente
+     * @param password la password
+     */
     public Medico(String login, String password) {
         super(login, password);
-        //inizializziamo le liste
-        this.turni=new ArrayList<>();
-        this.prestazioni=new ArrayList<>();
-        this.assenze=new ArrayList<>();
+        this.turni = new ArrayList<>();
+        this.prestazioni = new ArrayList<>();
+        this.assenze = new ArrayList<>();
     }
 
-    public void registraPrestazione (Ricovero ricovero, LocalDateTime inizio, LocalDateTime fine){
+    /**
+     * Registra una nuova prestazione su un ricovero.
+     *
+     * @param ricovero il ricovero associato
+     * @param inizio   data e ora di inizio
+     * @param fine     data e ora di fine
+     */
+    public void registraPrestazione(Ricovero ricovero, LocalDateTime inizio, LocalDateTime fine) {
         Prestazione prestazione = new Prestazione(inizio, ricovero);
         prestazione.setFine(fine);
         this.prestazioni.add(prestazione);
         System.out.println("Prestazione Registrata");
     }
 
-    //get per ottenere le liste
-    public List<Turno> getTurni(){
+    /** Restituisce la lista dei turni del medico. */
+    public List<Turno> getTurni() {
         return turni;
     }
 
-    public List<Prestazione> getPrestazioni(){
+    /** Restituisce la lista delle prestazioni del medico. */
+    public List<Prestazione> getPrestazioni() {
         return prestazioni;
     }
-    public List<Assenza> getAssenze(){
+
+    /** Restituisce la lista delle assenze del medico. */
+    public List<Assenza> getAssenze() {
         return assenze;
     }
 
-    public void addTurno(Turno t){this.turni.add(t);}
+    /** Aggiunge un turno alla lista. */
+    public void addTurno(Turno t) {
+        this.turni.add(t);
+    }
 
-    public void addPrestazioni(Prestazione p){this.prestazioni.add(p);}
+    /** Aggiunge una prestazione alla lista. */
+    public void addPrestazioni(Prestazione p) {
+        this.prestazioni.add(p);
+    }
 
-    public void addAssenza(Assenza a){this.assenze.add(a);}
-
+    /** Aggiunge un'assenza alla lista. */
+    public void addAssenza(Assenza a) {
+        this.assenze.add(a);
+    }
 }

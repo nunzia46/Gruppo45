@@ -11,8 +11,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementazione JDBC di RicoveroDAO per PostgreSQL.
+ * Gestisce la persistenza dei ricoveri nella tabella Ricovero.
+ */
 public class RicoveroPostgresDAO implements RicoveroDAO {
 
+    /**
+     * Inserisce un nuovo ricovero nel database.
+     *
+     * @param ricovero il ricovero da salvare
+     */
     @Override
     public void salva(Ricovero ricovero) {
         String query = "INSERT INTO Ricovero (inizio, dimissione_prevista, cf_paziente, codice_letto) VALUES (?, ?, ?, ?)";
@@ -28,6 +37,12 @@ public class RicoveroPostgresDAO implements RicoveroDAO {
         }
     }
 
+    /**
+     * Aggiorna la dimissione effettiva di un ricovero esistente.
+     * La chiave di ricerca e' composta dal codice fiscale del paziente e dall'inizio del ricovero.
+     *
+     * @param ricovero il ricovero con i dati aggiornati
+     */
     @Override
     public void aggiorna(Ricovero ricovero) {
         String query = "UPDATE Ricovero SET dimissione_effettiva = ? WHERE cf_paziente = ? AND inizio = ?";
@@ -47,6 +62,12 @@ public class RicoveroPostgresDAO implements RicoveroDAO {
         }
     }
 
+    /**
+     * Elimina un ricovero dal database.
+     * La chiave di ricerca e' composta dal codice fiscale del paziente e dall'inizio del ricovero.
+     *
+     * @param ricovero il ricovero da eliminare
+     */
     @Override
     public void elimina(Ricovero ricovero) {
         String query = "DELETE FROM Ricovero WHERE cf_paziente = ? AND inizio = ?";
@@ -60,12 +81,27 @@ public class RicoveroPostgresDAO implements RicoveroDAO {
         }
     }
 
+    /**
+     * Restituisce l'elenco di tutti i ricoveri.
+     * Implementazione stub da completare.
+     *
+     * @return lista di tutti i ricoveri
+     */
     @Override
     public List<Ricovero> trovaTutti() {
-        // Implementazione standard della SELECT su tutta la tabella
         return new ArrayList<>();
     }
 
+    /**
+     * Verifica se un letto e' occupato in un dato intervallo temporale.
+     * Un letto e' occupato se l'inizio del ricovero e' prima della fine dell'intervallo
+     * e la dimissione prevista e' dopo l'inizio dell'intervallo.
+     *
+     * @param codiceLetto il codice del letto da verificare
+     * @param inizio      l'inizio dell'intervallo
+     * @param fine        la fine dell'intervallo
+     * @return true se il letto e' occupato, false altrimenti
+     */
     @Override
     public boolean isLettoOccupato(String codiceLetto, LocalDateTime inizio, LocalDateTime fine) {
         String query = "SELECT 1 FROM Ricovero WHERE codice_letto = ? AND inizio < ? AND dimissione_prevista > ?";
@@ -82,6 +118,12 @@ public class RicoveroPostgresDAO implements RicoveroDAO {
         return false;
     }
 
+    /**
+     * Trova i pazienti con dimissione prevista in una data specifica.
+     *
+     * @param dataScadenza la data in cui verificare le dimissioni
+     * @return lista dei pazienti in scadenza di dimissione
+     */
     @Override
     public List<Paziente> trovaPazientiInScadenza(LocalDate dataScadenza) {
         List<Paziente> lista = new ArrayList<>();

@@ -1,17 +1,28 @@
 package ospedale.struttura;
 
+/**
+ * Rappresenta un letto all'interno della struttura ospedaliera.
+ * Identificato da un codice univoco.
+ */
 public class Letto {
     private String codiceIdentificativo;
 
-    public Letto(String codiceIdentificativo){
-        this.codiceIdentificativo= codiceIdentificativo;
+    /**
+     * Costruisce un letto con il codice specificato.
+     *
+     * @param codiceIdentificativo il codice identificativo del letto
+     */
+    public Letto(String codiceIdentificativo) {
+        this.codiceIdentificativo = codiceIdentificativo;
     }
 
+    /** Imposta il codice identificativo del letto. */
     public void setCodiceIdentificativo(String codiceIdentificativo) {
         this.codiceIdentificativo = codiceIdentificativo;
     }
 
-    public String getCodiceIdentificativo(){
+    /** Restituisce il codice identificativo del letto. */
+    public String getCodiceIdentificativo() {
         return codiceIdentificativo;
     }
 }

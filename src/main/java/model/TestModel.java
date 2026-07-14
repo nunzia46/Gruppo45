@@ -1,6 +1,6 @@
 package model;
 
-public class TestModel {
+public class  TestModel {
 
 	public static void main(String[] args) {
 		Utente u = new Utente("topolino","minni");

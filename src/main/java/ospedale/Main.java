@@ -7,49 +7,47 @@ import ospedale.utenti.Amministratore;
 import ospedale.struttura.Letto;
 import ospedale.utenti.Medico;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
 
-    public class Main {
-        public static void main(String[] args) {
+/**
+ * Classe di test per la dimostrazione del modello ospedaliero.
+ * Crea istanze di esempio e simula le operazioni principali.
+ */
+public class Main {
 
-            // creiamo un amministratore
-            Amministratore admin = new Amministratore();
-            admin.setLogin("admin01");
-            admin.setPassword("password123");
+    /**
+     * Punto di ingresso per la dimostrazione da console.
+     *
+     * @param args argomenti da riga di comando
+     */
+    public static void main(String[] args) {
 
-            // creiamo un medico
-            Medico medico = new Medico("Marco", "1234");
+        Amministratore admin = new Amministratore();
+        admin.setLogin("admin01");
+        admin.setPassword("password123");
 
-            // creiamo un paziente
-            Paziente p = new Paziente("Mario", "Rossi", "MRRSS987400JQ");
+        Medico medico = new Medico("Marco", "1234");
 
-            // creiamo un letto
-            Letto l = new Letto("L-101");
+        Paziente p = new Paziente("Mario", "Rossi", "MRRSS987400JQ");
 
-            LocalDateTime dataInizio = LocalDateTime.now();
-            LocalDateTime dataFine = LocalDateTime.now();
+        Letto l = new Letto("L-101");
 
-            // creiamo un ricovero
-            Ricovero ricovero = new Ricovero(dataInizio, p, l);
-            ricovero.setDimissionePrevista(dataFine);
+        LocalDateTime dataInizio = LocalDateTime.now();
+        LocalDateTime dataFine = LocalDateTime.now();
 
-            // l'amministratore registra il ricovero
-            admin.registraRicovero(p, l, dataInizio, dataFine);
-            // l'amministratore registra l'assenza
-            admin.registraAssenza(medico, dataInizio, dataFine);
+        Ricovero ricovero = new Ricovero(dataInizio, p, l);
+        ricovero.setDimissionePrevista(dataFine);
 
-            // creiamo un turno per il medico
-            Turno t1 = new Turno(dataInizio, dataFine);
-            medico.addTurno(t1);
+        admin.registraRicovero(p, l, dataInizio, dataFine);
+        admin.registraAssenza(medico, dataInizio, dataFine);
 
-            // il medico registra una prestazione
-            medico.registraPrestazione(ricovero, dataInizio, dataFine);
+        Turno t1 = new Turno(dataInizio, dataFine);
+        medico.addTurno(t1);
 
-            // stampa a schermo
-            System.out.println("Sistema Ospedaliero Avviato!");
-            System.out.println("Utente loggato: " + admin.getLogin());
-            System.out.println("È in corso il ricovero per: " + p.getNome() + " " + p.getCognome());
-        }
+        medico.registraPrestazione(ricovero, dataInizio, dataFine);
+
+        System.out.println("Sistema Ospedaliero Avviato!");
+        System.out.println("Utente loggato: " + admin.getLogin());
+        System.out.println("È in corso il ricovero per: " + p.getNome() + " " + p.getCognome());
     }
-
+}
